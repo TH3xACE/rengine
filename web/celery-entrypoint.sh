@@ -162,7 +162,7 @@ if [ "$DEBUG" == "1" ]; then
 fi
 
 # Load Custom Scan Engines
-#python3 manage.py loadcustomengines
+python3 manage.py loadcustomengines
 
 # watchmedo auto-restart --recursive --pattern="*.py" --directory="/usr/src/app/reNgine/" -- celery -A reNgine.tasks worker --autoscale=10,0 -l INFO -Q scan_queue &
 echo "Starting Workers..."

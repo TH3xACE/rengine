@@ -4,6 +4,9 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py collectstatic --no-input --clear
 
+# Load Custom Scan Engines
+python3 manage.py loadcustomengines
+
 # Load default engines, keywords, and external tools
 python3 manage.py loaddata fixtures/default_scan_engines.yaml --app scanEngine.EngineType
 python3 manage.py loaddata fixtures/default_keywords.yaml --app scanEngine.InterestingLookupModel
@@ -161,8 +164,6 @@ if [ "$DEBUG" == "1" ]; then
     loglevel='debug'
 fi
 
-# Load Custom Scan Engines
-python3 manage.py loadcustomengines
 
 # watchmedo auto-restart --recursive --pattern="*.py" --directory="/usr/src/app/reNgine/" -- celery -A reNgine.tasks worker --autoscale=10,0 -l INFO -Q scan_queue &
 echo "Starting Workers..."

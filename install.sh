@@ -144,6 +144,14 @@ if [ "${failed}" -eq 0 ]; then
   echo "Creating an account"
   echo "#########################################################################"
   make username isNonInteractive=$isNonInteractive
+
+  if [ $isNonInteractive = true ]; then
+    sleep 15
+    make initial
+    make customengines
+    echo "Non-Interactive: Defaults config and customengines loaded!!!" 
+  fi
+  
   make migrate
 
   tput setaf 2 && printf "\n%s\n" "Thank you for installing reNgine, happy recon!!"

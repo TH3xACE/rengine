@@ -18,6 +18,8 @@ tput setaf 2; echo "Changing the postgres username & password from .env is highl
 
 tput setaf 4;
 
+isNonInteractive=true
+
 while getopts ":nh" opt; do
   case ${opt} in
     n )

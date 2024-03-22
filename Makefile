@@ -66,6 +66,11 @@ logs:			## Tail all logs with -n 1000.
 images:			## Show all Docker images.
 	${COMPOSE_PREFIX_CMD} docker compose $(COMPOSE_ALL_FILES) images ${SERVICES}
 
+initial:         	## Default config reset
+	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py loaddata fixtures/default_scan_engines.yaml --app scanEngine.EngineType
+	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py loaddata fixtures/default_keywords.yaml --app scanEngine.InterestingLookupModel
+	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py loaddata fixtures/external_tools.yaml --app scanEngine.InstalledExternalTool
+
 customengines:          ## Load custom engines
 	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py loadcustomengines
 

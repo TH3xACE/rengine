@@ -18,14 +18,20 @@ tput setaf 2; echo "Changing the postgres username & password from .env is highl
 
 tput setaf 4;
 
-isNonInteractive=false
-while getopts nh opt; do
-   case $opt in
-      n) isNonInteractive=true ;;
-      h) usageFunction ;;
-      ?) usageFunction ;;
-   esac
+while getopts ":nh" opt; do
+  case ${opt} in
+    n )
+      # If -n flag is passed, set intercheck variable to true
+        isNonInteractive=true
+        #echo $isNonInteractive
+      ;;
+    h )    
+      usageFunction
+      exit 1
+      ;;
+  esac
 done
+
 
 if [ $isNonInteractive = false ]; then
     read -p "Are you sure, you made changes to .env file (y/n)? " answer
@@ -143,13 +149,14 @@ if [ "${failed}" -eq 0 ]; then
   echo "#########################################################################"
   echo "Creating an account"
   echo "#########################################################################"
-  make username isNonInteractive=$isNonInteractive
 
-  if [ $isNonInteractive = true ]; then
-    sleep 15
+ if [ $isNonInteractive = true ]; then   
+    make username isNonInteractive=$isNonInteractive
     make initial
     make customengines
-    echo "Non-Interactive: Defaults config and customengines loaded!!!" 
+    tput setaf 2 && printf "\n%s\n" "Non-Interactive: Defaults config and customengines loaded!!!" 
+  else
+    make username
   fi
   
   make migrate

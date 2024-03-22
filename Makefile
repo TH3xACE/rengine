@@ -66,6 +66,9 @@ logs:			## Tail all logs with -n 1000.
 images:			## Show all Docker images.
 	${COMPOSE_PREFIX_CMD} docker compose $(COMPOSE_ALL_FILES) images ${SERVICES}
 
+customengines:          ## Load custom engines
+	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py loadcustomengines
+
 prune:			## Remove containers and delete volume data.
 	@make stop && make rm && docker volume prune -f
 

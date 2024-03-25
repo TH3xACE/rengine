@@ -1,4 +1,5 @@
 screenshot: {
+  # Only alive URLs will be used for screenshot gathering.
   'enable_http_crawl': true,
   'intensity': 'normal',
   'timeout': 10,

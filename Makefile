@@ -75,6 +75,11 @@ initial:         	## Default config reset
 customengines:          ## Load custom engines
 	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py loadcustomengines
 
+rtusers:		## Create RT Operators
+	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py createsuperuser --username ${USR_SUPERUSER1} --email ${USR_SUPERUSER_EMAIL} --noinput
+	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py createsuperuser --username ${USR_SUPERUSER2} --email ${USR_SUPERUSER_EMAIL} --noinput
+	${COMPOSE_PREFIX_CMD} docker compose ${COMPOSE_ALL_FILES} exec web python3 manage.py createsuperuser --username ${USR_SUPERUSER3} --email ${USR_SUPERUSER_EMAIL} --noinput
+
 prune:			## Remove containers and delete volume data.
 	@make stop && make rm && docker volume prune -f
 

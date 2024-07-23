@@ -557,7 +557,9 @@ def subdomain_discovery(
 		subdomain, _ = save_subdomain(subdomain_name, ctx=ctx)
 		subdomain_count += 1
 		subdomains.append(subdomain)
-		urls.append(subdomain.name)
+		urls.append(subdomain_name)
+		# bug 
+		# urls.append(subdomain.name)
 
 	# Bulk crawl subdomains
 	if enable_http_crawl:

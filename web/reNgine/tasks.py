@@ -1212,14 +1212,25 @@ def screenshot(self, ctx={}, description=None):
 	if not os.path.isfile(output_path):
 		logger.error(f'Could not load EyeWitness results at {output_path} for {self.domain.name}.')
 		return
-
+	
 	# Loop through results and save objects in DB
 	screenshot_paths = []
-	with open(output_path, 'r') as file:
-		reader = csv.reader(file)
+	required_cols = [
+		'Protocol',
+		'Port',
+		'Domain',
+		'Request Status',
+		'Screenshot Path'
+	]
+	with open(output_path, 'r', newline='') as file:
+		reader = csv.DictReader(file)
 		for row in reader:
-			"Protocol,Port,Domain,Request Status,Screenshot Path, Source Path"
-			protocol, port, subdomain_name, status, screenshot_path, source_path = tuple(row)
+			parsed_row = {col: row[col] for col in required_cols if col in row}
+			protocol = parsed_row['Protocol']
+			port = parsed_row['Port']
+			subdomain_name = parsed_row['Domain']
+			status = parsed_row['Request Status']
+			screenshot_path = parsed_row['Screenshot Path']
 			logger.info(f'{protocol}:{port}:{subdomain_name}:{status}')
 			subdomain_query = Subdomain.objects.filter(name=subdomain_name)
 			if self.scan:
@@ -1230,6 +1241,23 @@ def screenshot(self, ctx={}, description=None):
 				subdomain.screenshot_path = screenshot_path.replace('/usr/src/scan_results/', '')
 				subdomain.save()
 				logger.warning(f'Added screenshot for {subdomain.name} to DB')
+	# Loop through results and save objects in DB
+	#screenshot_paths = []
+	#with open(output_path, 'r') as file:
+	#	reader = csv.reader(file)
+	#	for row in reader:
+	#		"Protocol,Port,Domain,Request Status,Screenshot Path, Source Path"
+	#		protocol, port, subdomain_name, status, screenshot_path, source_path = tuple(row)
+	#		logger.info(f'{protocol}:{port}:{subdomain_name}:{status}')
+	#		subdomain_query = Subdomain.objects.filter(name=subdomain_name)
+	#		if self.scan:
+	#			subdomain_query = subdomain_query.filter(scan_history=self.scan)
+	#		if status == 'Successful' and subdomain_query.exists():
+	#			subdomain = subdomain_query.first()
+	#			screenshot_paths.append(screenshot_path)
+	#			subdomain.screenshot_path = screenshot_path.replace('/usr/src/scan_results/', '')
+	#			subdomain.save()
+	#			logger.warning(f'Added screenshot for {subdomain.name} to DB')
 
 	# Remove all db, html extra files in screenshot results
 	run_command(
